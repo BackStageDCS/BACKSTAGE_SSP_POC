@@ -245,9 +245,8 @@ auth:
         clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
     github:
       development:
-        clientId: ${AUTH_GITHUB_CLIENT_ID}
-        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
-        enterpriseInstanceUrl: ${AUTH_GITHUB_ENTERPRISE_INSTANCE_URL}
+        clientId: Ov23lis6j8A8wddqSCKm
+        clientSecret: 80269d67862432ae47806932327f0ce6fbc161b7
     gitlab:
       development:
         clientId: ${AUTH_GITLAB_CLIENT_ID}
