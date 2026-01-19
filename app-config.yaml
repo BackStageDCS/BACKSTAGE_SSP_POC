@@ -95,7 +95,14 @@ techdocs:
 integrations:
   github:
     - host: github.com
-      token: ${GITHUB_TOKEN}
+      apps:
+        - $include: github-app-backstage-jk7testorg-credentials.yaml
+      #token: ${GITHUB_TOKEN}
+      #apps: 
+      #  - appId: ${GITHUB_APP_ID} 
+      #   clientId: ${GITHUB_APP_CLIENT_ID}
+      #    clientSecret: ${GITHUB_APP_CLIENT_SECRET}
+      #    privateKey: ${GITHUB_APP_PRIVATE_KEY} 
   ### Example for how to add your GitHub Enterprise instance using the API:
   # - host: ghe.example.net
   #   apiBaseUrl: https://ghe.example.net/api/v3
@@ -154,6 +161,7 @@ catalog:
         - System
         - Domain
         - Location
+        - Template
   providers:
     azureBlob:
       accountName: ${ACCOUNT_NAME}
@@ -167,6 +175,14 @@ catalog:
       plugins:
         - catalog
         - search
+    github:
+      # the provider ID can be any camelCase string
+      jkTestOrg:
+        organization: 'jk7testorg'
+        catalogPath: '**/catalog-info.yaml'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
   locations:
     # Add a location here to ingest it, for example from a URL:
     #
@@ -203,7 +219,15 @@ catalog:
       target: ../../plugins/scaffolder-backend/sample-templates/all-templates.yaml
       rules:
         - allow: [Template]
-
+    - type: url
+      target: https://github.com/jk7testorg/pythonappcatalogue/blob/main/catalog-info.yaml
+      rules:
+        - allow: [Template]
+    - type: url
+      target: https://github.com/jk7testorg/backstage-software-templates/blob/simplified/python-app/template.yaml
+      rules:
+        - allow: [Template]
+    
 scaffolder:
   auditor:
     taskParameterMaxLength: 256
@@ -319,3 +343,11 @@ devTools:
   scheduledTasks:
     plugins:
       - catalog
+events:
+  modules:
+    github:
+      webhookSecret: aaa
+logging:
+  level:
+    catalog.providers.github.wildcardProviderId: debug
+    catalog: debug
