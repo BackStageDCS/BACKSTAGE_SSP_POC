@@ -269,12 +269,12 @@ auth:
         clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
     github:
       development:
-        clientId: Ov23lis6j8A8wddqSCKm
-        clientSecret: 80269d67862432ae47806932327f0ce6fbc161b7
+        clientId: Ov23liNkey7sxiOnVj86
+        clientSecret: e888ec0fd60fecda872f57adfa10bf6139213d99
     gitlab:
       development:
-        clientId: ${AUTH_GITLAB_CLIENT_ID}
-        clientSecret: ${AUTH_GITLAB_CLIENT_SECRET}
+        clientId: ${GITLAB_CLIENT_ID}
+        clientSecret: ${GITLAB_CLIENT_SECRET}  
         audience: ${GITLAB_BASE_URL}
     saml:
       entryPoint: 'http://localhost:7001/'
