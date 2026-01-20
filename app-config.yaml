@@ -140,7 +140,7 @@ integrations:
 
   azure:
     - host: dev.azure.com
-      token: ${AZURE_TOKEN}
+      token: ${AZURE_TOKEN} 
   #  googleGcs:
   #    clientEmail: 'example@example.com'
   #    privateKey: ${GCS_PRIVATE_KEY}
@@ -269,8 +269,8 @@ auth:
         clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
     github:
       development:
-        clientId: Ov23lis6j8A8wddqSCKm
-        clientSecret: 80269d67862432ae47806932327f0ce6fbc161b7
+        clientId: Ov23ligr6Va1ToMByc2I
+        clientSecret: e4cfa0445b4f4f21aa724ef1bbeed3a8619ec5c7
     gitlab:
       development:
         clientId: ${AUTH_GITLAB_CLIENT_ID}
