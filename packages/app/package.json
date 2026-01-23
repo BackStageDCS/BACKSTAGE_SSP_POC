@@ -35,6 +35,7 @@
     ]
   },
   "dependencies": {
+    "@backstage-community/plugin-jenkins": "^0.27.0",
     "@backstage/app-defaults": "workspace:^",
     "@backstage/catalog-model": "workspace:^",
     "@backstage/cli": "workspace:^",

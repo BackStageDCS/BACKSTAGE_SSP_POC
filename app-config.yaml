@@ -179,7 +179,9 @@ catalog:
       # the provider ID can be any camelCase string
       jkTestOrg:
         organization: 'jk7testorg'
-        catalogPath: '**/catalog-info.yaml'
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          repository: '.*'
         schedule:
           frequency: { minutes: 30 }
           timeout: { minutes: 3 }
@@ -227,7 +229,7 @@ catalog:
       target: https://github.com/jk7testorg/backstage-software-templates/blob/simplified/python-app/template.yaml
       rules:
         - allow: [Template]
-    
+
 scaffolder:
   auditor:
     taskParameterMaxLength: 256
@@ -269,8 +271,8 @@ auth:
         clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
     github:
       development:
-        clientId: Ov23lis6j8A8wddqSCKm
-        clientSecret: 80269d67862432ae47806932327f0ce6fbc161b7
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
     gitlab:
       development:
         clientId: ${AUTH_GITLAB_CLIENT_ID}
@@ -351,3 +353,9 @@ logging:
   level:
     catalog.providers.github.wildcardProviderId: debug
     catalog: debug
+jenkins:
+  instances:
+    - name: default
+      baseUrl: http://localhost:8080
+      username: ${JENKINS_USERNAME}
+      apiKey: ${JENKINS_API_TOKEN}
