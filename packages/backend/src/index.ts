@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import jenkins from '@backstage-community/plugin-jenkins-backend';
+// import jenkins from '@backstage-community/plugin-jenkins-backend';
 import { createBackend } from '@backstage/backend-defaults';
 import { rootSystemMetadataServiceFactory } from '@backstage/backend-defaults/alpha';
 import {
@@ -51,6 +51,7 @@ backend.add(
   import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
 );
 backend.add(import('@backstage/plugin-catalog-backend'));
+backend.add(import('@backstage/plugin-catalog-backend-module-github'));
 backend.add(import('@backstage/plugin-catalog-backend-module-github-org'));
 backend.add(import('@backstage/plugin-catalog-backend-module-logs'));
 backend.add(import('@backstage/plugin-events-backend'));

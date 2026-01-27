@@ -222,11 +222,11 @@ catalog:
       rules:
         - allow: [Template]
     - type: url
-      target: https://github.com/jk7testorg/pythonappcatalogue/blob/main/catalog-info.yaml
+      target: https://github.com/jk7testorg/backstage-software-templates/blob/main/python-app/template.yaml
       rules:
         - allow: [Template]
     - type: url
-      target: https://github.com/jk7testorg/backstage-software-templates/blob/simplified/python-app/template.yaml
+      target: https://github.com/jk7testorg/software-jenkins-test/blob/main/python-app/template.yaml
       rules:
         - allow: [Template]
 
