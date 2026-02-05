@@ -74,6 +74,7 @@ import {
 import { CustomizableHomePage } from './components/home/CustomizableHomePage';
 import { HomePage } from './components/home/HomePage';
 import { BuiThemerPage } from '@backstage/plugin-mui-to-bui';
+import { GitReleaseManagerPage } from '@backstage-community/plugin-git-release-manager';
 
 const app = createApp({
   apis,
@@ -105,7 +106,7 @@ const app = createApp({
 const routes = (
   <FlatRoutes>
     <Route path="/" element={<Navigate to="catalog" />} />
-
+    <Route path="/git-release-manager" element={<GitReleaseManagerPage />} />
     {/* TODO(rubenl): Move this to / once its more mature and components exist */}
 
     <FeatureFlagged with="customizable-home-page-preview">

@@ -48,6 +48,7 @@ import BuildIcon from '@material-ui/icons/Build';
 import { NotificationsSidebarItem } from '@backstage/plugin-notifications';
 import UpdateIcon from '@material-ui/icons/Update';
 import CategoryIcon from '@material-ui/icons/Category';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -140,6 +141,11 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           icon={useApp().getSystemIcon('kind:api')!}
           to="api-docs"
           text="APIs"
+        />
+        <SidebarItem
+          icon={GitHubIcon}
+          to="git-release-manager"
+          text="Releases"
         />
         <SidebarItem
           icon={useApp().getSystemIcon('docs')!}

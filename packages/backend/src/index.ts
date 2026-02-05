@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+// import jenkins from '@backstage-community/plugin-jenkins-backend';
 import { createBackend } from '@backstage/backend-defaults';
 import { rootSystemMetadataServiceFactory } from '@backstage/backend-defaults/alpha';
+// import { createBackend } from '@backstage/backend-defaults';
 import {
   coreServices,
   createBackendFeatureLoader,
@@ -78,4 +79,5 @@ backend.add(rootSystemMetadataServiceFactory);
 
 backend.add(import('@backstage/plugin-events-backend-module-google-pubsub'));
 backend.add(import('@backstage/plugin-mcp-actions-backend'));
+backend.add(import('@backstage-community/plugin-jenkins-backend'));
 backend.start();

@@ -64,6 +64,11 @@ import {
   isKubernetesClusterAvailable,
   EntityKubernetesClusterContent,
 } from '@backstage/plugin-kubernetes-cluster';
+// Jenkins Plugin Import
+import {
+  EntityJenkinsContent,
+  isJenkinsAvailable,
+} from '@backstage-community/plugin-jenkins';
 import {
   EntityGroupProfileCard,
   EntityMembersListCard,
@@ -95,6 +100,10 @@ const EntityLayoutWrapper = (props: { children?: ReactNode }) => {
     </EntityLayout>
   );
 };
+import {
+  EntityGithubActionsContent,
+  isGithubActionsAvailable,
+} from '@backstage-community/plugin-github-actions';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -113,13 +122,19 @@ const techdocsContent = (
  * https://material-ui.com/components/grid/#basic-grid.
  */
 
-export const cicdContent = (
+const cicdContent = (
   <EntitySwitch>
+    {/* Jenkins: show builds when jenkins.io/job-full-name is present */}
+    <EntitySwitch.Case if={isJenkinsAvailable}>
+      <EntityJenkinsContent />
+    </EntitySwitch.Case>
+
+    {/* Fallback: no CI/CD annotation */}
     <EntitySwitch.Case>
       <EmptyState
         title="No CI/CD available for this entity"
         missing="info"
-        description="You need to add an annotation to your component if you want to enable CI/CD for it. You can read more about annotations in Backstage by clicking the button below."
+        description="To enable CI/CD for this component, configure a Jenkins job and add the jenkins.io/job-full-name annotation to its catalog-info.yaml."
         action={
           <Button
             variant="contained"
@@ -200,6 +215,13 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
     </EntityLayout.Route>
+    <EntityLayout.Route
+      path="/github-actions"
+      title="GitHub Actions"
+      if={isGithubActionsAvailable}
+    >
+      <EntityGithubActionsContent />
+    </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">
       <Grid container spacing={3} alignItems="stretch">
@@ -272,6 +294,9 @@ const defaultEntityPage = (
 
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/ci-cd" title="CI/CD">
+      {cicdContent}
     </EntityLayout.Route>
   </EntityLayoutWrapper>
 );

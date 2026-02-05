@@ -111,6 +111,10 @@ integrations:
   # - host: ghe.example.net
   #   rawBaseUrl: https://ghe.example.net/raw
   #   token: ${GHE_TOKEN}
+  jenkins:
+    baseUrl: ${JENKINS_SERVER_URL}
+    username: ${JENKINS_USERNAME}
+    apiKey: ${JENKINS_API_KEY}
   gitlab:
     - host: gitlab.com
       token: ${GITLAB_TOKEN}
@@ -178,8 +182,10 @@ catalog:
     github:
       # the provider ID can be any camelCase string
       jkTestOrg:
-        organization: 'jk7testorg'
+        organization: 'Backstage-IDP-PoC'
         catalogPath: '**/catalog-info.yaml'
+        filters:
+          repository: '.*'
         schedule:
           frequency: { minutes: 30 }
           timeout: { minutes: 3 }
@@ -220,11 +226,11 @@ catalog:
       rules:
         - allow: [Template]
     - type: url
-      target: https://github.com/jk7testorg/pythonappcatalogue/blob/main/catalog-info.yaml
+      target: https://github.com/Backstage-IDP-PoC/backstage-software-templates/blob/main/python-app/template.yaml
       rules:
         - allow: [Template]
     - type: url
-      target: https://github.com/jk7testorg/backstage-software-templates/blob/simplified/python-app/template.yaml
+      target: https://github.com/Backstage-IDP-PoC/software-jenkins-test/blob/main/python-app/template.yaml
       rules:
         - allow: [Template]
     
@@ -271,6 +277,11 @@ auth:
       development:
         clientId: Ov23liNkey7sxiOnVj86
         clientSecret: e888ec0fd60fecda872f57adfa10bf6139213d99
+        scope:
+          - read:user
+          - user:email
+          - read:org     
+          - repo
     gitlab:
       development:
         clientId: ${GITLAB_CLIENT_ID}
@@ -351,3 +362,9 @@ logging:
   level:
     catalog.providers.github.wildcardProviderId: debug
     catalog: debug
+jenkins:
+  instances:
+    - name: default
+      baseUrl: http://34.70.201.185:8080
+      username: suresh
+      apiKey: 111547aa7ac6a47ed284489a473f90129c
