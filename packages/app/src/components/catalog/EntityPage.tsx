@@ -104,6 +104,192 @@ import {
   EntityGithubActionsContent,
   isGithubActionsAvailable,
 } from '@backstage-community/plugin-github-actions';
+// ArgoCD UI
+import { useEntity } from '@backstage/plugin-catalog-react';
+import { useEffect, useState, useCallback } from 'react';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider';
+import { useApi, discoveryApiRef } from '@backstage/core-plugin-api';
+import Chip from '@material-ui/core/Chip';
+
+const StatusChip = ({ status }: { status: string }) => {
+  const normalized = status?.toLowerCase();
+
+  let bgColor = '#9e9e9e';
+  let textColor = '#fff';
+
+  if (
+    normalized === 'healthy' ||
+    normalized === 'synced' ||
+    normalized === 'succeeded'
+  ) {
+    bgColor = '#2e7d32'; // GREEN
+  } else if (
+    normalized === 'outofsync' ||
+    normalized === 'degraded' ||
+    normalized === 'error' ||
+    normalized === 'failed'
+  ) {
+    bgColor = '#c62828'; // RED
+  } else if (
+    normalized === 'progressing' ||
+    normalized === 'missing' ||
+    normalized === 'unknown'
+  ) {
+    bgColor = '#f9a825'; // YELLOW
+    textColor = '#000';
+  }
+
+  return (
+    <Chip
+      label={status}
+      style={{
+        backgroundColor: bgColor,
+        color: textColor,
+        fontWeight: 600,
+      }}
+      size="small"
+    />
+  );
+};
+const ArgoStatusCard = () => {
+  const { entity } = useEntity();
+  const discoveryApi = useApi(discoveryApiRef);
+
+  const appName =
+    entity.metadata.annotations?.['argocd/app-name']?.toLowerCase();
+
+  const [data, setData] = useState<any>();
+
+  const fetchData = useCallback(async () => {
+    if (!appName) return;
+
+    const baseUrl = await discoveryApi.getBaseUrl('proxy');
+    const response = await fetch(
+      `${baseUrl}/argocd/api/v1/applications/${appName}`,
+    );
+    const json = await response.json();
+    setData(json);
+  }, [appName, discoveryApi]);
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 10000);
+    return () => clearInterval(interval);
+  }, [fetchData]);
+
+  const manualSync = async () => {
+    const baseUrl = await discoveryApi.getBaseUrl('proxy');
+    await fetch(`${baseUrl}/argocd/api/v1/applications/${appName}/sync`, {
+      method: 'POST',
+    });
+    fetchData();
+  };
+
+  if (!data) return <Typography>Loading ArgoCD...</Typography>;
+
+  const status = data.status;
+
+  return (
+    <Card elevation={4}>
+      <CardContent>
+        {/* Header */}
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box>
+            <Typography variant="h5">{appName}</Typography>
+            <Box mt={1} display="flex" gap={8}>
+              <StatusChip status={status.sync.status} />
+              <StatusChip status={status.health.status} />
+            </Box>
+          </Box>
+
+          <Box display="flex" gap={8}>
+            <Button variant="contained" color="primary" onClick={manualSync}>
+              Sync
+            </Button>
+
+            <Button
+              variant="outlined"
+              color="default"
+              href={`https://35.184.124.65/applications/argocd/${appName}?view=tree&resource=`}
+              target="_blank"
+            >
+              Open ArgoCD
+            </Button>
+          </Box>
+        </Box>
+
+        <Divider style={{ margin: '20px 0' }} />
+
+        {/* Revision */}
+        <Typography variant="subtitle2">Revision</Typography>
+        <Typography variant="body2" gutterBottom>
+          {status.sync.revision?.slice(0, 7)}
+        </Typography>
+
+        <Divider style={{ margin: '20px 0' }} />
+
+        {/* Resources Table */}
+        <Typography variant="h6" gutterBottom>
+          Resources
+        </Typography>
+
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Kind</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Health</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {status.resources.map((r: any) => (
+              <TableRow key={r.name}>
+                <TableCell>{r.kind}</TableCell>
+                <TableCell>{r.name}</TableCell>
+                <TableCell>
+                  <StatusChip status={r.status} />
+                </TableCell>
+                <TableCell>
+                  {r.health?.status ? (
+                    <StatusChip status={r.health.status} />
+                  ) : (
+                    '—'
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        <Divider style={{ margin: '20px 0' }} />
+
+        {/* Deployment Timeline */}
+        <Typography variant="h6" gutterBottom>
+          Deployment History
+        </Typography>
+
+        {status.history.slice(0, 5).map((h: any) => (
+          <Box key={h.id} mb={2}>
+            <Typography variant="body2">{h.revision.slice(0, 7)}</Typography>
+            <Typography variant="caption" color="textSecondary">
+              {new Date(h.deployedAt).toLocaleString()}
+            </Typography>
+          </Box>
+        ))}
+      </CardContent>
+    </Card>
+  );
+};
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -214,6 +400,9 @@ const serviceEntityPage = (
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/argocd" title="Argo CD">
+      <ArgoStatusCard />
     </EntityLayout.Route>
     <EntityLayout.Route
       path="/github-actions"

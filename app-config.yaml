@@ -69,12 +69,12 @@ backend:
     pluginSources:
       - catalog
 # See README.md in the proxy-backend plugin for information on the configuration format
-proxy:
-  endpoints:
-    '/pagerduty':
-      target: https://api.pagerduty.com
-      headers:
-        Authorization: Token token=${PAGERDUTY_TOKEN}
+# proxy:
+#   endpoints:
+#     '/pagerduty':
+#       target: https://api.pagerduty.com
+#       headers:
+#         Authorization: Token token=${PAGERDUTY_TOKEN}
 
 organization:
   name: My Company
@@ -347,6 +347,13 @@ auth:
     myproxy: {}
     guest: {}
 
+proxy:
+  '/argocd':
+    target: https://35.184.124.65
+    changeOrigin: true
+    secure: false
+    headers:
+      Authorization: Bearer ${ARGOCD_AUTH_TOKEN}
 permission:
   enabled: true
 
