@@ -58,7 +58,7 @@ import { Root } from './components/Root';
 import { DelayingComponentFieldExtension } from './components/scaffolder/customScaffolderExtensions';
 import { defaultPreviewTemplate } from './components/scaffolder/defaultPreviewTemplate';
 import { searchPage } from './components/search/SearchPage';
-import { providers } from './identityProviders';
+// import { providers } from './identityProviders';
 import { SignalsDisplay } from '@backstage/plugin-signals';
 import { techDocsPage } from './components/techdocs/TechDocsPage';
 import { RequirePermission } from '@backstage/plugin-permission-react';
@@ -75,6 +75,11 @@ import { CustomizableHomePage } from './components/home/CustomizableHomePage';
 import { HomePage } from './components/home/HomePage';
 import { BuiThemerPage } from '@backstage/plugin-mui-to-bui';
 import { GitReleaseManagerPage } from '@backstage-community/plugin-git-release-manager';
+import {
+  // gitlabAuthApiRef,
+  githubAuthApiRef,
+  // googleAuthApiRef,
+} from '@backstage/core-plugin-api';
 
 const app = createApp({
   apis,
@@ -90,16 +95,22 @@ const app = createApp({
     },
   ],
   components: {
-    SignInPage: props => {
-      return (
-        <SignInPage
-          {...props}
-          providers={['guest', 'custom', ...providers]}
-          title="Select a sign-in method"
-          align="center"
-        />
-      );
-    },
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        title="Select a sign-in method"
+        align="center"
+        providers={[
+          {
+            id: 'github',
+            title: 'GitHub',
+            message: 'Sign in using GitHub',
+            apiRef: githubAuthApiRef,
+          },
+          'guest', // ✅ guest MUST be string
+        ]}
+      />
+    ),
   },
 });
 

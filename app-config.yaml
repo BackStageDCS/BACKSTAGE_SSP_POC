@@ -269,10 +269,10 @@ auth:
   # session:
   #   secret: custom session secret
   providers:
-    google:
-      development:
-        clientId: ${AUTH_GOOGLE_CLIENT_ID}
-        clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
+    # google:
+    #   development:
+    #     clientId: ${AUTH_GOOGLE_CLIENT_ID}
+    #     clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
     github:
       development:
         clientId: Ov23liNkey7sxiOnVj86
@@ -282,11 +282,11 @@ auth:
           - user:email
           - read:org     
           - repo
-    gitlab:
-      development:
-        clientId: ${GITLAB_CLIENT_ID}
-        clientSecret: ${GITLAB_CLIENT_SECRET}  
-        audience: ${GITLAB_BASE_URL}
+    # gitlab:
+    #   development:
+    #     clientId: ${GITLAB_CLIENT_ID}
+    #     clientSecret: ${GITLAB_CLIENT_SECRET}  
+    #     audience: ${GITLAB_BASE_URL}
     # saml:
     #   entryPoint: 'http://localhost:7001/'
     #   issuer: 'passport-saml'
