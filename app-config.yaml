@@ -1,5 +1,5 @@
 app:
-  title: Backstage Example App
+  title: Welcome to Backstage Self-Service Portal
   baseUrl: http://localhost:3000
   packages: all # ✨
 
@@ -77,7 +77,7 @@ backend:
 #         Authorization: Token token=${PAGERDUTY_TOKEN}
 
 organization:
-  name: My Company
+  name: Backstage Self-Service Portal
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs
@@ -204,27 +204,27 @@ catalog:
     # backend, for example packages/backend/.
 
     # Backstage example entities
-    - type: file
-      target: ../catalog-model/examples/all.yaml
+    # - type: file
+    #   target: ../catalog-model/examples/all.yaml
     # Backstage example groups and users
-    - type: file
-      target: ../catalog-model/examples/acme-corp.yaml
-      rules:
-        - allow: [User, Group]
+    # - type: file
+    #   target: ../catalog-model/examples/acme-corp.yaml
+    #   rules:
+    #     - allow: [User, Group]
     # Example component for github-actions and TechDocs
-    - type: file
-      target: ../../plugins/github-actions/examples/sample.yaml
+    # - type: file
+    #   target: ../../plugins/github-actions/examples/sample.yaml
     # Example component for TechDocs
-    - type: file
-      target: ../../plugins/techdocs-backend/examples/documented-component/catalog-info.yaml
+    # - type: file
+    #   target: ../../plugins/techdocs-backend/examples/documented-component/catalog-info.yaml
     # Example component for ADRs
-    - type: file
-      target: ../../plugins/adr/examples/component/catalog-info.yaml
+    # - type: file
+    #   target: ../../plugins/adr/examples/component/catalog-info.yaml
     # Backstage example templates
-    - type: file
-      target: ../../plugins/scaffolder-backend/sample-templates/all-templates.yaml
-      rules:
-        - allow: [Template]
+    # - type: file
+    #   target: ../../plugins/scaffolder-backend/sample-templates/all-templates.yaml
+    #   rules:
+    #     - allow: [Template]
     - type: url
       target: https://github.com/Backstage-IDP-PoC/backstage-software-templates/blob/main/python-app/template.yaml
       rules:
@@ -287,63 +287,63 @@ auth:
         clientId: ${GITLAB_CLIENT_ID}
         clientSecret: ${GITLAB_CLIENT_SECRET}  
         audience: ${GITLAB_BASE_URL}
-    saml:
-      entryPoint: 'http://localhost:7001/'
-      issuer: 'passport-saml'
-      cert: 'fake-cert-base64'
-    okta:
-      development:
-        clientId: ${AUTH_OKTA_CLIENT_ID}
-        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
-        audience: ${AUTH_OKTA_AUDIENCE}
-    oauth2:
-      development:
-        clientId: ${AUTH_OAUTH2_CLIENT_ID}
-        clientSecret: ${AUTH_OAUTH2_CLIENT_SECRET}
-        authorizationUrl: ${AUTH_OAUTH2_AUTH_URL}
-        tokenUrl: ${AUTH_OAUTH2_TOKEN_URL}
+    # saml:
+    #   entryPoint: 'http://localhost:7001/'
+    #   issuer: 'passport-saml'
+    #   cert: 'fake-cert-base64'
+    # okta:
+    #   development:
+    #     clientId: ${AUTH_OKTA_CLIENT_ID}
+    #     clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+    #     audience: ${AUTH_OKTA_AUDIENCE}
+    # oauth2:
+    #   development:
+    #     clientId: ${AUTH_OAUTH2_CLIENT_ID}
+    #     clientSecret: ${AUTH_OAUTH2_CLIENT_SECRET}
+    #     authorizationUrl: ${AUTH_OAUTH2_AUTH_URL}
+    #     tokenUrl: ${AUTH_OAUTH2_TOKEN_URL}
         ###
         # provide a list of scopes as needed for your OAuth2 Server:
         #
         # scope: saml-login-selector openid profile email
-    oidc:
-      # Note that you must define a session secret (see above) since the oidc provider requires session support.
-      # Note that by default, this provider will use the 'none' prompt which assumes that your are already logged on in the IDP.
-      # You should set prompt to:
-      # - auto: will let the IDP decide if you need to log on or if you can skip login when you have an active SSO session
-      # - login: will force the IDP to always present a login form to the user
-      development:
-        metadataUrl: ${AUTH_OIDC_METADATA_URL}
-        clientId: ${AUTH_OIDC_CLIENT_ID}
-        clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
-        tokenEndpointAuthMethod: ${AUTH_OIDC_TOKEN_ENDPOINT_AUTH_METHOD} # default='client_secret_basic'
-        tokenSignedResponseAlg: ${AUTH_OIDC_TOKEN_SIGNED_RESPONSE_ALG} # default='RS256'
-        scope: ${AUTH_OIDC_SCOPE} # default='openid profile email'
-        prompt: ${AUTH_OIDC_PROMPT} # default=none (allowed values: auto, none, consent, login)
-    auth0:
-      development:
-        clientId: ${AUTH_AUTH0_CLIENT_ID}
-        clientSecret: ${AUTH_AUTH0_CLIENT_SECRET}
-        domain: ${AUTH_AUTH0_DOMAIN}
-    microsoft:
-      development:
-        clientId: ${AUTH_MICROSOFT_CLIENT_ID}
-        clientSecret: ${AUTH_MICROSOFT_CLIENT_SECRET}
-        tenantId: ${AUTH_MICROSOFT_TENANT_ID}
-    onelogin:
-      development:
-        clientId: ${AUTH_ONELOGIN_CLIENT_ID}
-        clientSecret: ${AUTH_ONELOGIN_CLIENT_SECRET}
-        issuer: ${AUTH_ONELOGIN_ISSUER}
-    bitbucket:
-      development:
-        clientId: ${AUTH_BITBUCKET_CLIENT_ID}
-        clientSecret: ${AUTH_BITBUCKET_CLIENT_SECRET}
-    atlassian:
-      development:
-        clientId: ${AUTH_ATLASSIAN_CLIENT_ID}
-        clientSecret: ${AUTH_ATLASSIAN_CLIENT_SECRET}
-        scope: ${AUTH_ATLASSIAN_SCOPES}
+    # oidc:
+    #   # Note that you must define a session secret (see above) since the oidc provider requires session support.
+    #   # Note that by default, this provider will use the 'none' prompt which assumes that your are already logged on in the IDP.
+    #   # You should set prompt to:
+    #   # - auto: will let the IDP decide if you need to log on or if you can skip login when you have an active SSO session
+    #   # - login: will force the IDP to always present a login form to the user
+    #   development:
+    #     metadataUrl: ${AUTH_OIDC_METADATA_URL}
+    #     clientId: ${AUTH_OIDC_CLIENT_ID}
+    #     clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
+    #     tokenEndpointAuthMethod: ${AUTH_OIDC_TOKEN_ENDPOINT_AUTH_METHOD} # default='client_secret_basic'
+    #     tokenSignedResponseAlg: ${AUTH_OIDC_TOKEN_SIGNED_RESPONSE_ALG} # default='RS256'
+    #     scope: ${AUTH_OIDC_SCOPE} # default='openid profile email'
+    #     prompt: ${AUTH_OIDC_PROMPT} # default=none (allowed values: auto, none, consent, login)
+    # auth0:
+    #   development:
+    #     clientId: ${AUTH_AUTH0_CLIENT_ID}
+    #     clientSecret: ${AUTH_AUTH0_CLIENT_SECRET}
+    #     domain: ${AUTH_AUTH0_DOMAIN}
+    # microsoft:
+    #   development:
+    #     clientId: ${AUTH_MICROSOFT_CLIENT_ID}
+    #     clientSecret: ${AUTH_MICROSOFT_CLIENT_SECRET}
+    #     tenantId: ${AUTH_MICROSOFT_TENANT_ID}
+    # onelogin:
+    #   development:
+    #     clientId: ${AUTH_ONELOGIN_CLIENT_ID}
+    #     clientSecret: ${AUTH_ONELOGIN_CLIENT_SECRET}
+    #     issuer: ${AUTH_ONELOGIN_ISSUER}
+    # bitbucket:
+    #   development:
+    #     clientId: ${AUTH_BITBUCKET_CLIENT_ID}
+    #     clientSecret: ${AUTH_BITBUCKET_CLIENT_SECRET}
+    # atlassian:
+    #   development:
+    #     clientId: ${AUTH_ATLASSIAN_CLIENT_ID}
+    #     clientSecret: ${AUTH_ATLASSIAN_CLIENT_SECRET}
+    #     scope: ${AUTH_ATLASSIAN_SCOPES}
     myproxy: {}
     guest: {}
 

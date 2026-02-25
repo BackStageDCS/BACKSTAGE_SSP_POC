@@ -196,7 +196,21 @@ const ArgoStatusCard = () => {
 
   if (!data) return <Typography>Loading ArgoCD...</Typography>;
 
-  const status = data.status;
+  const status = data?.status;
+
+  if (!status) return <Typography>No status available</Typography>;
+
+  const renderHealthStatus = (r: any) => {
+    if (r.kind === 'Application') {
+      return <StatusChip status={data?.status?.health?.status ?? 'Unknown'} />;
+    }
+
+    if (r.health?.status) {
+      return <StatusChip status={r.health.status} />;
+    }
+
+    return '—';
+  };
 
   return (
     <Card elevation={4}>
@@ -259,13 +273,7 @@ const ArgoStatusCard = () => {
                 <TableCell>
                   <StatusChip status={r.status} />
                 </TableCell>
-                <TableCell>
-                  {r.health?.status ? (
-                    <StatusChip status={r.health.status} />
-                  ) : (
-                    '—'
-                  )}
-                </TableCell>
+                <TableCell>{renderHealthStatus(r)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
