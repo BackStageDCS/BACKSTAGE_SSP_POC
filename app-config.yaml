@@ -372,6 +372,6 @@ logging:
 jenkins:
   instances:
     - name: default
-      baseUrl: http://34.70.201.185:8080
+      baseUrl: http://34.9.249.97:8080
       username: suresh
       apiKey: 111547aa7ac6a47ed284489a473f90129c
