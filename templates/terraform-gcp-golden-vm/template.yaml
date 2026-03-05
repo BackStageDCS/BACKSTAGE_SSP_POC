@@ -1,0 +1,83 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+
+metadata:
+  name: terraform-gcp-golden-vm
+  title: Deploy GCP VM using Golden Image
+  description: Create VM from Golden Image using Terraform
+
+spec:
+  owner: platform-team
+  type: infrastructure
+
+  parameters:
+    - title: VM Configuration
+      required:
+        - instance_name
+        - repoUrl
+      properties:
+
+        project_id:
+          type: string
+          default: gspann-backstage
+
+        region:
+          type: string
+          default: us-central1
+
+        zone:
+          type: string
+          default: us-central1-b
+
+        instance_name:
+          type: string
+
+        machine_type:
+          type: string
+          # enum:
+            # - e2-micro
+            # - e2-medium
+            # - e2-standard-2
+            # - e2-standard-4
+          default: n4-standard-2
+
+        golden_image:
+          type: string
+          enum:
+            - projects/gspann-backstage/global/images/golden-image-v1
+            
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+
+    - id: fetch
+      name: Fetch Terraform Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          project_id: ${{ parameters.project_id }}
+          region: ${{ parameters.region }}
+          zone: ${{ parameters.zone }}
+          instance_name: ${{ parameters.instance_name }}
+          machine_type: ${{ parameters.machine_type }}
+          golden_image: ${{ parameters.golden_image }}
+
+    - id: publish
+      name: Publish Repository
+      action: publish:github
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        defaultBranch: main
+        description: Terraform GCP VM created from Golden Image
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}

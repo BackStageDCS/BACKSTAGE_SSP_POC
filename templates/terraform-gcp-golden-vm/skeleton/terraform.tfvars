@@ -1,0 +1,6 @@
+project_id    = "${{ values.project_id }}"
+region        = "${{ values.region }}"
+zone          = "${{ values.zone }}"
+instance_name = "${{ values.instance_name }}"
+machine_type  = "${{ values.machine_type }}"
+golden_image  = "${{ values.golden_image }}"

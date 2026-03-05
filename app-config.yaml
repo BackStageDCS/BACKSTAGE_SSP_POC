@@ -97,7 +97,8 @@ integrations:
     - host: github.com
       apps:
         - $include: github-app-backstage-jk7testorg-credentials.yaml
-      #token: ${GITHUB_TOKEN}
+      # wsl
+      token: ${GITHUB_TOKEN}
       #apps: 
       #  - appId: ${GITHUB_APP_ID} 
       #   clientId: ${GITHUB_APP_CLIENT_ID}
@@ -233,6 +234,10 @@ catalog:
       target: https://github.com/Backstage-IDP-PoC/software-jenkins-test/blob/main/python-app/template.yaml
       rules:
         - allow: [Template]
+    - type: file
+      target: ../../templates/terraform-gcp-golden-vm/template.yaml
+      rules:
+        - allow: [Template]   
     
 scaffolder:
   auditor:
