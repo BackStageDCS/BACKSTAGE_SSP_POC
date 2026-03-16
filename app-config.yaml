@@ -98,7 +98,7 @@ integrations:
       apps:
         - $include: github-app-backstage-jk7testorg-credentials.yaml
       # wsl
-      token: ${GITHUB_TOKEN}
+      # token: ${GITHUB_TOKEN}
       #apps: 
       #  - appId: ${GITHUB_APP_ID} 
       #   clientId: ${GITHUB_APP_CLIENT_ID}
@@ -377,6 +377,15 @@ logging:
 jenkins:
   instances:
     - name: default
-      baseUrl: http://34.9.249.97:8080
+      baseUrl: http://34.10.43.232:8080
       username: suresh
       apiKey: 111547aa7ac6a47ed284489a473f90129c
+
+argocd:
+  appLocatorMethods:
+    - type: 'config'
+      instances:
+        - name: default
+          url: https://35.184.124.65
+          token: ${ARGOCD_AUTH_TOKEN}
+ 

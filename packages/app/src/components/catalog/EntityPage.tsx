@@ -168,16 +168,49 @@ const ArgoStatusCard = () => {
     entity.metadata.annotations?.['argocd/app-name']?.toLowerCase();
 
   const [data, setData] = useState<any>();
+  const [error, setError] = useState<string | null>(null);
+  const [serviceUrl, setServiceUrl] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (!appName) return;
+    try {
+      const baseUrl = await discoveryApi.getBaseUrl('proxy');
 
-    const baseUrl = await discoveryApi.getBaseUrl('proxy');
-    const response = await fetch(
-      `${baseUrl}/argocd/api/v1/applications/${appName}`,
-    );
-    const json = await response.json();
-    setData(json);
+      // Application data
+      const response = await fetch(
+        `${baseUrl}/argocd/api/v1/applications/${appName}`,
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const json = await response.json();
+      setData(json);
+
+      // Resource tree (for LoadBalancer IP)
+      const treeRes = await fetch(
+        `${baseUrl}/argocd/api/v1/applications/${appName}/resource-tree`,
+      );
+
+      if (treeRes.ok) {
+        const treeJson = await treeRes.json();
+
+        const serviceNode = treeJson.nodes?.find(
+          (n: any) => n.kind === 'Service',
+        );
+
+        const ingress = serviceNode?.networkingInfo?.ingress?.[0];
+
+        const host = ingress?.ip || ingress?.hostname;
+
+        if (host) {
+          setServiceUrl(`http://${host}`);
+        }
+      }
+    } catch (err: any) {
+      console.error('Argo fetch error:', err);
+      setError(err.message);
+    }
   }, [appName, discoveryApi]);
 
   useEffect(() => {
@@ -217,14 +250,13 @@ const ArgoStatusCard = () => {
       <CardContent>
         {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box>
-            <Typography variant="h5">{appName}</Typography>
-            <Box mt={1} display="flex" gap={8}>
+            <Box>
+              <Typography variant="h5">{appName}</Typography>
+              <Box mt={1} display="flex" alignItems="center" gap={8} flexWrap="wrap">
               <StatusChip status={status.sync.status} />
               <StatusChip status={status.health.status} />
             </Box>
           </Box>
-
           <Box display="flex" gap={8}>
             <Button variant="contained" color="primary" onClick={manualSync}>
               Sync
@@ -243,12 +275,54 @@ const ArgoStatusCard = () => {
 
         <Divider style={{ margin: '20px 0' }} />
 
-        {/* Revision */}
-        <Typography variant="subtitle2">Revision</Typography>
-        <Typography variant="body2" gutterBottom>
-          {status.sync.revision?.slice(0, 7)}
-        </Typography>
+        {/* Service Endpoint */}
+        <Box mt={3} display="flex" alignItems="center" justifyContent="space-between" >
+          <Typography variant="h6" gutterBottom>
+            Service Endpoint
+          </Typography>
+          {serviceUrl && (
+          <Button
+            size="small"
+            variant="contained"
+            href={serviceUrl}
+            target="_blank"
+            style={{
+              textTransform: 'none',
+              fontWeight: 'bolder',
+              background: '#0a4b6b',
+              color: '#fff',
+              borderRadius: 20,
+              // padding: '2px 10px',
+              minWidth: 'auto',
+            }}
+          >
+            <Typography variant="caption">
+              {serviceUrl.replace('http://', '')} ↗
+            </Typography>
+          </Button>
+        )}
+        </Box>
 
+        <Divider style={{ margin: '20px 0' }} />
+
+        {/* Revision */}
+        <Box mt={3}>
+          <Typography variant="h6" gutterBottom>
+            Revision
+          </Typography>
+
+          <Chip
+            label={status.sync.revision?.slice(0, 7)}
+            size="small"
+            style={{
+              marginTop: 6,
+              backgroundColor: '#0a4b6b',
+              color: '#fff',
+              fontFamily: 'monospace',
+              fontWeight: 600,
+            }}
+          />
+        </Box>
         <Divider style={{ margin: '20px 0' }} />
 
         {/* Resources Table */}
@@ -282,22 +356,43 @@ const ArgoStatusCard = () => {
         <Divider style={{ margin: '20px 0' }} />
 
         {/* Deployment Timeline */}
-        <Typography variant="h6" gutterBottom>
-          Deployment History
-        </Typography>
+        <Box mt={3}>
+          <Typography variant="h6" gutterBottom>
+            Deployment History
+          </Typography>
 
-        {status.history.slice(0, 5).map((h: any) => (
-          <Box key={h.id} mb={2}>
-            <Typography variant="body2">{h.revision.slice(0, 7)}</Typography>
-            <Typography variant="caption" color="textSecondary">
-              {new Date(h.deployedAt).toLocaleString()}
-            </Typography>
-          </Box>
-        ))}
+          {status.history.slice(0, 5).map((h: any) => (
+            <Box
+              key={h.id}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              p={1.5}
+              mb={1}
+              borderRadius={6}
+            >
+              <Chip
+                label={h.revision.slice(0, 7)}
+                size="small"
+                style={{
+                  fontFamily: 'monospace',
+                  backgroundColor: '#0a4b6b',
+                  color: '#fff',
+                }}
+              />
+
+              <Typography variant="caption" color="textSecondary">
+                {new Date(h.deployedAt).toLocaleString()}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
       </CardContent>
     </Card>
   );
 };
+
+ 
 
 const techdocsContent = (
   <EntityTechdocsContent>
