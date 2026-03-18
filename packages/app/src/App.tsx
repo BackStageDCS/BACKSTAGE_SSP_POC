@@ -186,9 +186,8 @@ const routes = (
           defaultPreviewTemplate={defaultPreviewTemplate}
           groups={[
             {
-              title: 'Recommended',
-              filter: entity =>
-                entity?.metadata?.tags?.includes('recommended') ?? false,
+              title: 'GSSP Templates',
+              filter: ()=>true,
             },
           ]}
         />

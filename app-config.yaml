@@ -1,5 +1,5 @@
 app:
-  title: Welcome to Backstage Self-Service Portal
+  title: Welcome to GSPANN Self-Service Portal
   baseUrl: http://localhost:3000
   packages: all # ✨
 
@@ -77,7 +77,7 @@ backend:
 #         Authorization: Token token=${PAGERDUTY_TOKEN}
 
 organization:
-  name: Backstage Self-Service Portal
+  name: GSPANN Self-Service Portal
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs
@@ -167,6 +167,8 @@ catalog:
         - Domain
         - Location
         - Template
+        - User
+        - Group
   providers:
     azureBlob:
       accountName: ${ACCOUNT_NAME}
@@ -182,14 +184,21 @@ catalog:
         - search
     github:
       # the provider ID can be any camelCase string
-      jkTestOrg:
+      Backstage-IDP-PoC:
         organization: 'Backstage-IDP-PoC'
-        catalogPath: '**/catalog-info.yaml'
+        catalogPath: '/catalog-info.yaml'
         filters:
           repository: '.*'
         schedule:
           frequency: { minutes: 30 }
           timeout: { minutes: 3 }
+    orgRepos:
+        host: github.com
+        organization: 'Backstage-IDP-PoC'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
+ 
   locations:
     # Add a location here to ingest it, for example from a URL:
     #
@@ -234,10 +243,14 @@ catalog:
       target: https://github.com/Backstage-IDP-PoC/software-jenkins-test/blob/main/python-app/template.yaml
       rules:
         - allow: [Template]
-    - type: file
-      target: ../../templates/terraform-gcp-golden-vm/template.yaml
+    - type: url
+      target: https://github.com/Backstage-IDP-PoC/software-ci-test/blob/main/backstage-template.yaml
       rules:
-        - allow: [Template]   
+        - allow: [Template]
+    # - type: file
+    #   target: ../../templates/terraform-gcp-golden-vm/template.yaml
+    #   rules:
+    #     - allow: [Template]   
     
 scaffolder:
   auditor:
@@ -377,7 +390,11 @@ logging:
 jenkins:
   instances:
     - name: default
+<<<<<<< HEAD
       baseUrl: http://34.10.43.232:8080
+=======
+      baseUrl: http://35.208.92.122:8080
+>>>>>>> 37c389e0d1 (Latest Code as on 18th March 2026 2nd PoC Demo - GSSP)
       username: suresh
       apiKey: 111547aa7ac6a47ed284489a473f90129c
 
@@ -388,4 +405,7 @@ argocd:
         - name: default
           url: https://35.184.124.65
           token: ${ARGOCD_AUTH_TOKEN}
+<<<<<<< HEAD
  
+=======
+>>>>>>> 37c389e0d1 (Latest Code as on 18th March 2026 2nd PoC Demo - GSSP)

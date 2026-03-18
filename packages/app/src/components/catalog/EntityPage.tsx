@@ -507,13 +507,13 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/argocd" title="Argo CD">
       <ArgoStatusCard />
     </EntityLayout.Route>
-    <EntityLayout.Route
+    {/* <EntityLayout.Route
       path="/github-actions"
       title="GitHub Actions"
       if={isGithubActionsAvailable}
     >
       <EntityGithubActionsContent />
-    </EntityLayout.Route>
+    </EntityLayout.Route> */}
 
     <EntityLayout.Route path="/api" title="API">
       <Grid container spacing={3} alignItems="stretch">

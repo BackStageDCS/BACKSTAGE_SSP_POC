@@ -3,8 +3,8 @@ kind: Template
 
 metadata:
   name: terraform-gcp-golden-vm
-  title: Deploy GCP VM using Golden Image
-  description: Create VM from Golden Image using Terraform
+  title: Deploy SSP VM for Developers using Golden Image
+  description: Create VM from Golden Image 
 
 spec:
   owner: platform-team
